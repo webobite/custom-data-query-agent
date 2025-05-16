@@ -1,78 +1,155 @@
 # Natural Language Query Agent
 
-A TypeScript-based CLI application that allows querying data using natural language, powered by Ollama's local LLM.
+A full-stack application that allows querying data using natural language, powered by a Python backend, TypeScript CLI frontend, and Ollama's local LLM.
+
+## Table of Contents
+- [Prerequisites](#prerequisites)
+- [Project Structure](#project-structure)
+- [Setup Instructions](#setup-instructions)
+  - [1. Install Ollama](#1-install-ollama)
+  - [2. Set Up Python Backend](#2-set-up-python-backend)
+  - [3. Set Up TypeScript Frontend](#3-set-up-typescript-frontend)
+- [Running the Application](#running-the-application)
+- [Example Queries](#example-queries)
+- [Development](#development)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
 
 ## Prerequisites
 
-1. Node.js 18 or higher
-2. Ollama installed and running locally
-3. Python server (from the parent directory) running on port 8000
+- Node.js 18 or higher
+- Python 3.8 or higher
+- pip (Python package manager)
+- Ollama (for local LLM processing)
 
-## Setup
+## Project Structure
 
-1. Install dependencies:
+```
+custom-data-query-agent/
+├── mcp-agent-typescript/    # TypeScript CLI frontend
+│   ├── src/
+│   │   ├── config/       # Configuration files
+│   │   ├── services/      # Service implementations
+│   │   └── index.ts       # Entry point
+│   ├── package.json
+│   └── tsconfig.json
+├── mcp-server-python/      # Python FastAPI backend
+│   ├── data/              # Sample data files
+│   ├── main.py            # FastAPI application
+│   └── requirements.txt
+└── README.md              # This file
+```
+
+## Setup Instructions
+
+### 1. Install Ollama
+
+1. Download and install Ollama from [ollama.ai](https://ollama.ai/)
+2. Start the Ollama server:
    ```bash
-   npm install
-   ```
-
-2. Build the TypeScript code:
-   ```bash
-   npm run build
-   ```
-
-3. Make sure you have Ollama installed and running:
-   ```bash
-   # Install Ollama if you haven't already
-   # Follow instructions at: https://ollama.ai/
-   
-   # Start the Ollama server
    ollama serve
    ```
-
-4. In a separate terminal, pull the required model:
+3. In a new terminal, pull the required model:
    ```bash
    ollama pull llama3
    ```
 
+### 2. Set Up Python Backend
+
+1. Navigate to the Python backend directory:
+   ```bash
+   cd mcp-server-python
+   ```
+
+2. Create and activate a virtual environment (recommended):
+   ```bash
+   # On macOS/Linux
+   python3 -m venv venv
+   source venv/bin/activate
+
+   # On Windows
+   python -m venv venv
+   .\venv\Scripts\activate
+   ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Start the backend server:
+   ```bash
+   uvicorn main:app --reload
+   ```
+   The server will start at `http://localhost:8000`
+
+### 3. Set Up TypeScript Frontend
+
+1. In a new terminal, navigate to the TypeScript directory:
+   ```bash
+   cd mcp-agent-typescript
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Build the project:
+   ```bash
+   npm run build
+   ```
+
 ## Running the Application
 
-1. Start the application:
-   ```bash
-   npm start
-   ```
+1. Ensure all services are running in separate terminals:
+   - Terminal 1: Ollama server (`ollama serve`)
+   - Terminal 2: Python backend (`cd mcp-server-python && uvicorn main:app --reload`)
+   - Terminal 3: TypeScript frontend (`cd mcp-agent-typescript && npm start`)
 
-2. Enter your natural language queries at the prompt, for example:
-   ```
-   > Show me all employees in Engineering
-   > Find people with more than 20 project hours
-   > List all employees
-   ```
-
-3. Type 'exit' to quit the application.
-
-## Development
-
-For development with auto-reload:
-
-```bash
-npm run dev
-```
+2. In the TypeScript terminal, you'll see a prompt where you can enter natural language queries.
 
 ## Example Queries
 
-- "Show me everyone in Engineering"
-- "Find people with more than 30 project hours"
-- "List all employees"
-- "Show me people in Engineering with less than 20 project hours"
+Try these example queries in the application:
 
-## Project Structure
+```
+> Show me all employees in Engineering
+> Find people with more than 30 project hours
+> List all employees in Sales with less than 20 hours
+> Show me the top 5 employees by project hours
+```
 
-- `src/` - Source code
-  - `config/` - Configuration files
-  - `services/` - Service implementations
-    - `queryServiceClient.ts` - Handles communication with the Python server
-    - `nlpService.ts` - Handles natural language processing using Ollama
-- `dist/` - Compiled JavaScript (generated)
+## Development
+
+### TypeScript Frontend Development
+
+- Run in development mode with auto-reload:
+  ```bash
+  cd mcp-agent-typescript
+  npm run dev
+  ```
+
+### Python Backend Development
+
+- The backend server will automatically reload when you make changes to the code.
+- API documentation is available at `http://localhost:8000/docs`
+
+## Troubleshooting
+
+### Ollama Issues
+- Ensure Ollama is running: `ollama list` should show your models
+- If you get rate-limited, try: `OLLAMA_HOST=0.0.0.0 ollama serve`
+
+### Python Backend Issues
+- Make sure all dependencies are installed
+- Check that the server is running on port 8000
+- Verify the data file exists at `mcp-server-python/data/sample_data.csv`
+
+### TypeScript Frontend Issues
+- Ensure you've run `npm install`
+- Check for TypeScript errors with `tsc --noEmit`
+- Verify the backend URL in `queryServiceClient.ts`
 
 ## License
 
