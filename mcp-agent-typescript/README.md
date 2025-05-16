@@ -1,37 +1,47 @@
 # Natural Language Query Agent
 
-A powerful TypeScript-based CLI application that allows querying data using natural language, powered by Ollama's local LLM. This application provides an intuitive interface for interacting with your data through natural language queries.
+A powerful TypeScript-based CLI application that allows querying data using natural language, powered by Ollama's local LLM. This application provides an intuitive interface for interacting with CSV data through natural language queries, with a Python FastAPI backend for data processing.
 
 ## ✨ Features
 
-- **Natural Language Processing**: Convert plain English queries into structured database filters
+- **Natural Language Processing**: Convert plain English queries into structured database filters using Ollama's LLM
 - **Advanced Querying**: Supports complex queries with multiple conditions, ranges, and sorting
-- **Pagination**: Handle large datasets with built-in pagination support
+- **RESTful API**: FastAPI backend with proper error handling and response formatting
+- **Type Safety**: Full TypeScript support with proper type definitions
 - **Rich Output**: Beautifully formatted tables with syntax highlighting
-- **Error Handling**: Comprehensive error handling and user feedback
-- **Extensible**: Easy to extend with new query capabilities and data sources
+- **Robust Error Handling**: Comprehensive error handling and user feedback
+- **Case-Insensitive Matching**: Smart filtering that handles case variations in text fields
+- **Extensible Architecture**: Modular design for easy extension
 
 ## 🚀 Prerequisites
 
 1. **Node.js 18 or higher**
 2. **Ollama** installed and running locally
-3. **Python backend server** running on port 8000 (from the parent directory)
+3. **Python 3.8+** with pip
+4. **Required Python packages**:
+   ```bash
+   pip install fastapi uvicorn pandas python-multipart
+   ```
+5. **Backend server** running on port 8000 (from the parent directory)
 
 ## 🛠️ Setup
 
 1. **Clone the repository** (if you haven't already):
    ```bash
    git clone <repository-url>
-   cd custom-data-query-agent/mcp-agent-typescript
+   cd custom-data-query-agent
    ```
 
-2. **Install dependencies**:
+2. **Set up the Python backend**:
    ```bash
+   cd mcp-server-python
+   pip install -r requirements.txt
+   ```
+
+3. **Set up the TypeScript frontend**:
+   ```bash
+   cd ../mcp-agent-typescript
    npm install
-   ```
-
-3. **Build the TypeScript code**:
-   ```bash
    npm run build
    ```
 
@@ -48,8 +58,16 @@ A powerful TypeScript-based CLI application that allows querying data using natu
 
 ## 🏃‍♂️ Running the Application
 
-1. **Start the application** in development mode:
+1. **Start the Python backend server**:
    ```bash
+   cd mcp-server-python
+   uvicorn main:app --reload
+   ```
+   The server will start on `http://localhost:8000`
+
+2. **Start the TypeScript application** in a new terminal:
+   ```bash
+   cd mcp-agent-typescript
    npm run dev
    ```
    Or for production:
@@ -57,16 +75,15 @@ A powerful TypeScript-based CLI application that allows querying data using natu
    npm start
    ```
 
-2. **Enter your natural language queries** at the prompt. For example:
+3. **Enter your natural language queries** at the prompt. For example:
    ```
    > Show me all employees in Engineering
-   > Find people with more than 20 project hours
-   > List all active employees in Sales
-   > Show the top 5 employees by project hours
-   > Find people who joined after 2023 with more than 30 project hours
+   > Find people with more than 100 project hours
+   > List all employees in Marketing
+   > Show employees with project hours between 50 and 150
    ```
 
-3. **Useful commands**:
+4. **Useful commands**:
    - `help` - Show help information
    - `exit` - Quit the application
 
@@ -110,41 +127,92 @@ Here are some example queries you can try:
 ## 🧩 Project Structure
 
 ```
-src/
-├── config/           # Configuration files
-│   └── llmConfig.ts  # LLM model configuration
-├── services/         # Service layer
-│   ├── nlpService.ts       # Natural language processing
-│   └── queryServiceClient.ts# API client for the backend
-└── index.ts          # Main application entry point
+custom-data-query-agent/
+├── mcp-agent-typescript/    # TypeScript frontend
+│   ├── src/
+│   │   ├── config/         # Configuration files
+│   │   │   └── llmConfig.ts  # LLM model configuration
+│   │   ├── services/         # Service layer
+│   │   │   ├── nlpService.ts        # Natural language processing
+│   │   │   └── queryServiceClient.ts # API client for the backend
+│   │   └── index.ts          # Main application entry point
+│   └── package.json
+│
+└── mcp-server-python/      # Python FastAPI backend
+    ├── data/               # Sample data files
+    ├── main.py             # FastAPI application
+    └── requirements.txt    # Python dependencies
 ```
 
 ## 🔧 Configuration
 
-You can customize the application behavior by modifying the configuration in `src/config/llmConfig.ts`:
-
+### Frontend Configuration (`mcp-agent-typescript/src/config/llmConfig.ts`)
 - `model`: The Ollama model to use (default: 'llama3')
 - `temperature`: Controls randomness in the LLM's responses (0.0 to 1.0)
 - `maxTokens`: Maximum number of tokens to generate
 - `systemPrompt`: Instructions for the LLM on how to process queries
 
+### Backend Configuration (`mcp-server-python/main.py`)
+- `DATA_FILE_PATH`: Path to the CSV data file
+- `SERVER_HOST` and `SERVER_PORT`: Server binding configuration
+- `DEBUG_MODE`: Enable/disable debug logging
+
 ## 🐛 Debugging
 
-To enable debug logging, set the `DEBUG` environment variable:
-
+### Frontend Debugging
 ```bash
+# Enable debug logging
 DEBUG=* npm start
+
+# Or run in development mode with auto-reload
+npm run dev
 ```
+
+### Backend Debugging
+```bash
+# Run server with debug logging
+cd mcp-server-python
+uvicorn main:app --reload --log-level debug
+
+# Or run with Python directly for more control
+python -m uvicorn main:app --reload --log-level debug
+```
+
+### Common Issues
+1. **Ollama not running**: Ensure Ollama server is running with `ollama serve`
+2. **Python dependencies**: Run `pip install -r requirements.txt` if you get import errors
+3. **Port conflicts**: Check if port 8000 is available for the Python server
+4. **CORS issues**: Ensure the frontend is making requests to the correct backend URL
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+We welcome contributions! Here's how to get started:
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests and ensure code quality:
+   ```bash
+   # TypeScript
+   npm run lint
+   npm test
+   
+   # Python
+   flake8 .
+   ```
+5. Commit your changes with a clear message (`git commit -m 'feat: add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+### Commit Message Guidelines
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+- `feat:` for new features
+- `fix:` for bug fixes
+- `docs:` for documentation changes
+- `style:` for formatting changes
+- `refactor:` for code changes that neither fix bugs nor add features
+- `test:` for adding tests
+- `chore:` for maintenance tasks
 
 ## 📄 License
 
@@ -157,30 +225,26 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Chalk](https://github.com/chalk/chalk) for beautiful terminal output
 - [Table](https://github.com/gajus/table) for formatted table output
 
-## Development
+## 🚀 Example Queries
 
-For development with auto-reload:
+### Basic Queries
+- "Show me all employees in Engineering"
+- "Find people with more than 100 project hours"
+- "List all employees in Marketing"
 
-```bash
-npm run dev
-```
+### Advanced Queries
+- "Show engineers with project hours between 50 and 150"
+- "List employees sorted by project hours (highest first)"
+- "Find people in Engineering with more than 100 project hours"
 
-## Example Queries
+## 📊 Data Model
 
-- "Show me everyone in Engineering"
-- "Find people with more than 30 project hours"
-- "List all employees"
-- "Show me people in Engineering with less than 20 project hours"
+The application works with employee data containing the following fields:
+- `id`: Unique identifier (number)
+- `name`: Employee name (string)
+- `department`: Department name (string)
+- `project_hours`: Number of hours worked on projects (number)
 
-## Project Structure
+## 📄 License
 
-- `src/` - Source code
-  - `config/` - Configuration files
-  - `services/` - Service implementations
-    - `queryServiceClient.ts` - Handles communication with the Python server
-    - `nlpService.ts` - Handles natural language processing using Ollama
-- `dist/` - Compiled JavaScript (generated)
-
-## License
-
-ISC
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
