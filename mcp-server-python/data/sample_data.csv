@@ -1,0 +1,21 @@
+id,name,department,project_hours,join_date,status,role
+1,Alice,Engineering,120,2023-01-15,active,Senior Developer
+2,Bob,Marketing,80,2023-03-22,active,Marketing Manager
+3,Charlie,Engineering,200,2022-11-05,active,Lead Developer
+4,Diana,HR,60,2023-05-10,active,HR Specialist
+5,Eve,Engineering,150,2023-02-28,active,Developer
+6,Frank,Sales,90,2023-04-15,active,Sales Executive
+7,Grace,Engineering,180,2022-09-12,active,Senior Developer
+8,Henry,Marketing,70,2023-06-01,active,Content Writer
+9,Ivy,Engineering,95,2023-07-20,on_leave,Developer
+10,Jack,Sales,110,2023-01-10,active,Sales Manager
+11,Karen,Engineering,130,2022-12-15,active,Developer
+12,Leo,HR,50,2023-08-05,active,HR Assistant
+13,Mia,Engineering,160,2022-10-30,active,Senior Developer
+14,Nathan,Marketing,85,2023-07-15,active,Marketing Specialist
+15,Olivia,Engineering,75,2023-09-01,on_leave,Intern
+16,Peter,Sales,120,2023-02-15,active,Sales Executive
+17,Quinn,Engineering,140,2022-08-20,active,Developer
+18,Rachel,Engineering,190,2022-07-10,active,Lead Developer
+19,Sam,Marketing,65,2023-05-20,active,Content Writer
+20,Taylor,Engineering,110,2023-03-10,active,Developer

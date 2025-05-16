@@ -102,12 +102,12 @@ Here are some example queries you can try:
   ```
   > Show employees with 20-40 project hours
   > Find people with more than 30 project hours
-  > List employees with less than 10 project hours
+  > List employees with less than 10 project hours -- giving wrong result
   ```
 
 - Date ranges:
   ```
-  > Show employees who joined after January 2023
+  > Show employees who joined after January 2023 - giving wrong result
   > Find people who joined between 2022 and 2023
   ```
 
@@ -115,13 +115,13 @@ Here are some example queries you can try:
   ```
   > Show the top 5 employees by project hours
   > List employees sorted by name in descending order
-  > Show the 10 most recent hires
+  > Show the 10 most recent hires -- # this is still giving error
   ```
 
 - Combined queries:
   ```
   > Find active employees in Engineering with more than 20 project hours
-  > Show me managers in the Sales department who joined in the last year
+  > Show me managers in the Sales department who joined in the last year -- # this is still giving error
   ```
 
 ## 🧩 Project Structure
